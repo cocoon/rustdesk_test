@@ -116,6 +116,7 @@ class _RemotePageState extends State<RemotePage>
       showKBLayoutTypeChooserIfNeeded(
           _ffi.ffiModel.pi.platform, _ffi.dialogManager);
     });
+    _ffi.ffiModel.updateEventListener(sessionId, widget.id);
     _ffi.start(
       widget.id,
       password: widget.password,
@@ -126,6 +127,28 @@ class _RemotePageState extends State<RemotePage>
       display: widget.display,
       displays: widget.displays,
     );
+    
+    //
+    // Force login if a password is defined (received from PassArgumentsScreen)
+    //
+    if(widget.password != null)
+    {
+      _ffi.login(
+        '', //osUsername,
+        '', //osPassword,
+        sessionId, //sessionId,
+        widget.password!, //password,
+        false, //rememberPassword,
+      );
+    }
+
+    //
+    // Use adaptive scale by default
+    //    
+    bind
+        .sessionSetViewStyle(sessionId: sessionId, value: kRemoteViewStyleAdaptive)
+        .then((_) => _ffi.canvasModel.updateViewStyle());
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
       _ffi.dialogManager
@@ -135,7 +158,6 @@ class _RemotePageState extends State<RemotePage>
       WakelockPlus.enable();
     }
 
-    _ffi.ffiModel.updateEventListener(sessionId, widget.id);
     if (!isWeb) bind.pluginSyncUi(syncTo: kAppTypeDesktopRemote);
     _ffi.qualityMonitorModel.checkShowQualityMonitor(sessionId);
     _ffi.dialogManager.loadMobileActionsOverlayVisible();

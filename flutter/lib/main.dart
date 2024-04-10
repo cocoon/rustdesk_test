@@ -442,6 +442,23 @@ class _AppState extends State<App> with WidgetsBindingObserver {
           ChangeNotifierProvider.value(value: gFFI.peerTabModel),
         ],
         child: GetMaterialApp(
+          initialRoute: '/',
+          routes: {},
+          onGenerateRoute: (settings) {
+            // If you push the PassArguments route
+            var connectUrlActive = settings.name?.startsWith(PassArgumentsScreen.routeName);
+            connectUrlActive = connectUrlActive == null ? false : true;
+
+            if (connectUrlActive) {
+              var uriData = Uri.parse(settings.name!);
+              var queryParams = uriData.queryParameters;
+              return MaterialPageRoute(
+                builder: (context) {
+                  return PassArgumentsScreen(queryParams);
+                },
+              );
+            }
+          },
           navigatorKey: globalKey,
           debugShowCheckedModeBanner: false,
           title: 'RustDesk',
