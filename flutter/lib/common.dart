@@ -2402,7 +2402,10 @@ connect(BuildContext context, String id,
           context,
           MaterialPageRoute(
             builder: (BuildContext context) => RemotePage(
-                id: id, password: password, isSharedPassword: isSharedPassword),
+              id: id, 
+              password: password, 
+              isSharedPassword: isSharedPassword,
+            ),
           ),
         );
       }

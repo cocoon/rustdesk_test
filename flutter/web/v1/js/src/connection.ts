@@ -238,7 +238,9 @@ export default class Connection {
       if (msg?.hash) {
         this._hash = msg?.hash;
         if (!this._password)
+        {
           this.msgbox("input-password", "Password Required", "");
+        }
         this.login();
       } else if (msg?.test_delay) {
         const test_delay = msg?.test_delay;
@@ -430,7 +432,7 @@ export default class Connection {
       var tm = new Date().getTime();
       var i = 0;
       const n = vf.vp9s?.frames.length;
-      vf.vp9s.frames.forEach((f) => {
+      vf.vp9s.frames.forEach((f: any) => {
         dec.processFrame(f.data.slice(0).buffer, (ok: any) => {
           i++;
           if (i == n) this.sendVideoReceived();
